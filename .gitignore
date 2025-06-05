@@ -44,3 +44,6 @@ venv/
 
 # Maven/Java build output
 target/
+
+# NetBeans actions/config
+nbactions.xml
