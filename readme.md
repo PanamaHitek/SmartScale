@@ -1,17 +1,21 @@
 # SmartScale v1.0.0
 
-SmartScale is a software tool designed to read, plot, and export data to Excel from live readings of a BLE scale (RX402b20).  
-It offers intelligent weight measurement and tracking solutions.
+SmartScale is a software tool designed to read, plot, and export data to Excel from live readings of a Bluetooth scale (RX402b20).  
+
+## Demo Video
+
+Check out a short demo of SmartScale in action:  
+[![SmartScale Demo](https://img.youtube.com/vi/PvwOIkErZDY/0.jpg)](https://www.youtube.com/shorts/PvwOIkErZDY)
 
 # Background
 
 Recently, I needed an affordable, compact wireless scale for some lab experiments and discovered this model:
 
-![alt text](image.png)
+![alt text](images/image.png)
 
 I purchased it for $35 on Amazon ([link](https://www.amazon.com/Wireless-Bluetooth-Kitchen-Nutrient-Scale/dp/B009LCM8YY/ref=asc_df_B009LCM8YY)).
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 While the scale itself works well, the Android app frequently crashes after a few minutes, and the iPhone app is the only one that functions reliably. Unfortunately, there is no Windows support.
 
@@ -187,6 +191,67 @@ python retrieve_data.py 50:FB:19:8A:A0:C2
 
 You can use the provided Python scripts directly, or take advantage of the Java-based graphical interface included in this project. The Java application communicates with the Python scripts to provide a user-friendly experience for reading, plotting, and exporting scale data.
 
+![alt text](images/image-2.png)
+
 The GUI is built using Swing, Apache POI, and JFreeChart—classic libraries that remain effective for rapid development. While the interface is simple and was developed quickly (in just a few hours), it is functional and reliable for its intended purpose.
+
+**Quick Start:**  
+Download the released jar file from [SmartScale v1.0.0 Release](https://github.com/PanamaHitek/SmartScale/releases/download/v1.0.0/SmartScale-1.0.0.jar).
+
+To run the application:
+```bash
+java -jar SmartScale-1.0.0.jar
+```
+
+**Note:**  
+This jar was compiled on Windows and is intended for Windows systems. If you wish to use it on Ubuntu or another OS, you will need to compile it yourself.
+
+When launched, the GUI checks for the required Python scripts. If they are missing, it will extract the scripts and a pre-packaged virtual environment (venv) from the jar file into the directory where the jar is executed. This includes the scanning script, data retrieval script, and an environment testing script.
+
+If you clone the project, the main entry point is:
+```
+src\main\java\com\panama_hitek\SmartScale.java
+```
+
+## Packaging Python Environment
+
+To simplify setup and ensure consistent execution, I took a somewhat unconventional approach: all required Python scripts and their dependencies are bundled inside a Python virtual environment (venv), which is itself packaged within the jar file using Maven. On first launch, the application automatically extracts the venv and all necessary files to the appropriate directory, so everything needed to run is available without any manual installation or configuration. This method streamlines the user experience and helps avoid dependency issues across different systems.
+
+Maybe this isn’t the most orthodox solution, but it gets the job done. I’m not a software developer, I’m an engineer, and my goal is simply to make things work.
+
+**Disclaimer:**  
+This project was developed quickly, so some files may lack thorough documentation. However, the application is fully functional for its intended purpose. Contributions and suggestions for improvements or new features are welcome. If you have any questions about the project, feel free to ask!
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+```
+MIT License
+
+Copyright (c) 2024 Antony Garcia
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+
 
 
