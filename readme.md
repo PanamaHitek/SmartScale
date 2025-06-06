@@ -5,7 +5,11 @@ SmartScale is a software tool designed to read, plot, and export data to Excel f
 ## Demo Video
 
 Check out a short demo of SmartScale in action:  
-[![SmartScale Demo](https://img.youtube.com/vi/PvwOIkErZDY/0.jpg)](https://www.youtube.com/shorts/PvwOIkErZDY)
+<p align="center">
+    <a href="https://www.youtube.com/shorts/PvwOIkErZDY">
+        <img src="https://img.youtube.com/vi/PvwOIkErZDY/0.jpg" alt="SmartScale Demo">
+    </a>
+</p>
 
 # Background
 
