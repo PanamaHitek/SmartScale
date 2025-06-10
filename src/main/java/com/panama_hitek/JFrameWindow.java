@@ -257,7 +257,7 @@ public class JFrameWindow extends javax.swing.JFrame {
                             .getParent();
                     
                     // Use virtual environment Python executable
-                    Path pythonExePath = basePath.resolve("python").resolve("venv").resolve("Scripts").resolve("python.exe");
+                    Path pythonExePath = basePath.resolve("python").resolve("venv").resolve("python.exe");
                     Path scriptPath = basePath.resolve("python").resolve("retrieve_data.py");
                     
                     // Diagnostics

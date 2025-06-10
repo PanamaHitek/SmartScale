@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 public class EnvironmentChecker {
 
     private static final String PYTHON_FOLDER_PREFIX = "python/";
-    private static final String EXTRACTION_MARKER = ".python_extracted";
+
 
     public static void checkEnvironment() {
         final JFrameProgress progressDialog = new JFrameProgress();
@@ -56,6 +56,46 @@ public class EnvironmentChecker {
                     }
                 } else {
                     System.out.println("Not running from a JAR file. Running in development environment.");
+
+                    try {
+                        String executionPath = new File(".").getCanonicalPath();
+                     
+                        executionPath = executionPath + File.separator + "target";
+                      String pythonFolder = new File(".").getCanonicalPath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "python";
+
+     
+    File sourceDir = new File(pythonFolder);
+    File destDir = new File(executionPath + File.separator + "python");
+
+    if (sourceDir.exists() && sourceDir.isDirectory()) {
+        System.out.println("Copying Python folder from: " + sourceDir.getAbsolutePath() + " to " + destDir.getAbsolutePath());
+
+        // Recursively copy files
+        java.nio.file.Files.walk(sourceDir.toPath()).forEach(sourcePath -> {
+            try {
+                java.nio.file.Path targetPath = destDir.toPath().resolve(sourceDir.toPath().relativize(sourcePath));
+                if (sourcePath.toFile().isDirectory()) {
+                    if (!targetPath.toFile().exists()) {
+                        java.nio.file.Files.createDirectories(targetPath);
+                    }
+                } else {
+                    java.nio.file.Files.copy(sourcePath, targetPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException e) {
+                System.out.println("Failed to copy file: " + sourcePath + " - " + e.getMessage());
+                System.exit(1);
+            }
+        });
+        System.out.println("Python folder copied successfully.");
+    } else {
+        System.out.println("Source Python folder does not exist: " + sourceDir.getAbsolutePath());
+        System.exit(1);
+    }
+
+                    } catch (IOException e) {
+                        System.out.println("Failed to get execution path: " + e.getMessage());
+                    }
+
                 }
             } catch (Exception e) {
                 System.out.println("Unexpected error: " + e.getMessage());
@@ -73,7 +113,7 @@ public class EnvironmentChecker {
      */
     private static boolean isPythonEnvironmentReady(File baseDir) {
         try {
-            File pythonExe = new File(baseDir, "python/venv/Scripts/python.exe");
+            File pythonExe = new File(baseDir, "python/venv/python.exe");
             File checkupScript = new File(baseDir, "python/environment_checkup.py");
 
             if (!pythonExe.exists() || !checkupScript.exists()) {
@@ -84,7 +124,7 @@ public class EnvironmentChecker {
             // Create process to run Python check script
             ProcessBuilder processBuilder = new ProcessBuilder(
                 pythonExe.getAbsolutePath(),
-                checkupScript.getAbsolutePath()
+               checkupScript.getAbsolutePath()
             );
 
             // Set working directory to base directory
@@ -160,13 +200,8 @@ public class EnvironmentChecker {
     }
 
     private static void extractPythonFiles(File jarFile, File outputDir) {
-        // Check if extraction was already done
-        File markerFile = new File(outputDir, EXTRACTION_MARKER);
 
-        if (markerFile.exists()) {
-            System.out.println("\nPython files were already extracted. Skipping extraction.");
-            return;
-        }
+ 
 
         try (JarFile jar = new JarFile(jarFile)) {
             System.out.println("\nExtracting Python resources from JAR:");
@@ -187,13 +222,7 @@ public class EnvironmentChecker {
 
             System.out.println("\nExtracted " + extractedCount + " Python files to: " + outputDir.getAbsolutePath());
 
-            // Create marker file to indicate extraction is complete
-            try {
-                markerFile.createNewFile();
-                System.out.println("Created extraction marker file: " + markerFile.getName());
-            } catch (IOException e) {
-                System.out.println("Warning: Could not create marker file: " + e.getMessage());
-            }
+   
         } catch (IOException e) {
             System.out.println("Error extracting files from JAR: " + e.getMessage());
             e.printStackTrace();
